@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Record movement | Inventory & Stock{% endblock %}
+{% block heading %}Record movement{% endblock %}
+{% block content %}
+<div class="form-intro"><a href="{{ url_for('transactions') }}">← Back to movements</a><h2>Adjust stock</h2><p class="muted">Stock-in increases the available quantity; stock-out reduces it.</p></div>
+{% if products %}<form class="panel form-panel narrow-panel" method="post">
+  <label>Product *<select name="product_id" required><option value="">Select a product</option>{% for p in products %}<option value="{{ p.id }}" {% if request.form.get('product_id') == p.id|string %}selected{% endif %}>{{ p.name }} ({{ p.sku }}) — available: {{ p.quantity }}</option>{% endfor %}</select></label>
+  <label>Movement type *<select name="transaction_type" required><option value="IN" {% if request.form.get('transaction_type', 'IN') == 'IN' %}selected{% endif %}>Stock in (receive/add)</option><option value="OUT" {% if request.form.get('transaction_type') == 'OUT' %}selected{% endif %}>Stock out (issue/remove)</option></select></label>
+  <label>Quantity *<input type="number" name="quantity" min="1" step="1" required value="{{ request.form.get('quantity', '1') }}"></label>
+  <label>Note / reference<input name="note" maxlength="200" value="{{ request.form.get('note', '') }}" placeholder="e.g. Supplier delivery, order reference"></label>
+  <div class="form-actions"><a class="button button-outline" href="{{ url_for('transactions') }}">Cancel</a><button class="button button-primary" type="submit">Save movement</button></div>
+</form>{% else %}<div class="panel empty-state">Please <a href="{{ url_for('new_product') }}">add a product</a> before recording stock movements.</div>{% endif %}
+{% endblock %}

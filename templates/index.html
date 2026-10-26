@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | Inventory & Stock{% endblock %}
+{% block heading %}Dashboard{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h2>Inventory overview</h2><p class="muted">A clear view of your stock, value, and items that need attention.</p></div><a class="button button-outline" href="{{ url_for('new_product') }}">＋ Add product</a></div>
+<div class="stats-grid">
+  <article class="stat-card"><div class="stat-top"><span>Total products</span><span class="stat-icon purple">▤</span></div><strong>{{ summary.product_count }}</strong><small>Unique products tracked</small></article>
+  <article class="stat-card"><div class="stat-top"><span>Units in stock</span><span class="stat-icon blue">▦</span></div><strong>{{ summary.units }}</strong><small>Across all products</small></article>
+  <article class="stat-card"><div class="stat-top"><span>Inventory cost value</span><span class="stat-icon green">₹</span></div><strong>₹{{ "%.2f"|format(summary.inventory_cost) }}</strong><small>Quantity × cost price</small></article>
+  <article class="stat-card"><div class="stat-top"><span>Low / out of stock</span><span class="stat-icon orange">!</span></div><strong>{{ summary.low_count }} <span class="stat-divider">/</span> {{ summary.out_count }}</strong><small>At/below reorder level / empty</small></article>
+</div>
+<div class="content-grid">
+  <section class="panel"><div class="panel-heading"><div><h3>Stock requiring attention</h3><p class="muted">Products at or below their reorder level</p></div><a href="{{ url_for('products') }}">View all →</a></div>
+  {% if low_stock %}<div class="table-wrap"><table><thead><tr><th>Product</th><th>SKU</th><th>Available</th><th>Reorder at</th><th>Status</th></tr></thead><tbody>{% for p in low_stock %}<tr><td class="product-cell">{{ p.name }}</td><td>{{ p.sku }}</td><td>{{ p.quantity }}</td><td>{{ p.reorder_level }}</td><td>{% if p.quantity == 0 %}<span class="pill pill-danger">Out of stock</span>{% else %}<span class="pill pill-warning">Low stock</span>{% endif %}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state">No products yet. Add a product to start tracking inventory.</div>{% endif %}</section>
+  <section class="panel"><div class="panel-heading"><div><h3>Recent movements</h3><p class="muted">Latest stock-in and stock-out activity</p></div><a href="{{ url_for('transactions') }}">History →</a></div>
+  {% if recent %}<div class="movement-list">{% for t in recent %}<div class="movement-item"><span class="movement-symbol {% if t.transaction_type == 'IN' %}movement-in{% else %}movement-out{% endif %}">{% if t.transaction_type == 'IN' %}↓{% else %}↑{% endif %}</span><div class="movement-detail"><strong>{{ t.product_name }}</strong><small>{{ t.sku }} · {{ t.created_at }}</small></div><span class="movement-qty {% if t.transaction_type == 'IN' %}text-green{% else %}text-red{% endif %}">{% if t.transaction_type == 'IN' %}+{% else %}−{% endif %}{{ t.quantity }}</span></div>{% endfor %}</div>{% else %}<div class="empty-state">Stock movements will appear here.</div>{% endif %}</section>
+</div>
+<div class="bottom-note"><span class="note-icon">i</span><div><strong>Inventory value insight</strong><p>Current cost value: <b>₹{{ "%.2f"|format(summary.inventory_cost) }}</b>. Potential sales value at listed selling prices: <b>₹{{ "%.2f"|format(summary.potential_sales) }}</b>. These are estimates based on the quantities recorded.</p></div></div>
+{% endblock %}

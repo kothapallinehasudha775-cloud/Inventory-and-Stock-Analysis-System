@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Inventory & Stock Analysis{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="{{ url_for('index') }}"><span class="brand-icon">IS</span><span>Inventory<span class="brand-muted"> & Stock</span></span></a>
+    <p class="nav-label">WORKSPACE</p>
+    <nav>
+      <a class="{% if request.endpoint == 'index' %}active{% endif %}" href="{{ url_for('index') }}">▦ <span>Dashboard</span></a>
+      <a class="{% if request.endpoint in ['products', 'new_product', 'edit_product'] %}active{% endif %}" href="{{ url_for('products') }}">▤ <span>Products</span></a>
+      <a class="{% if request.endpoint in ['transactions', 'new_transaction'] %}active{% endif %}" href="{{ url_for('transactions') }}">↔ <span>Stock movements</span></a>
+    </nav>
+    <div class="sidebar-bottom"><span class="status-dot"></span> Local inventory workspace</div>
+  </aside>
+  <main class="main">
+    <header class="topbar"><div><span class="eyebrow">INVENTORY MANAGEMENT</span><h1>{% block heading %}Dashboard{% endblock %}</h1></div><a class="button button-primary" href="{{ url_for('new_transaction') }}">＋ Record movement</a></header>
+    <section class="page-content">
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}<div class="flash-stack">{% for category, message in messages %}<div class="flash flash-{{ category }}">{{ message }}</div>{% endfor %}</div>{% endif %}
+      {% endwith %}
+      {% block content %}{% endblock %}
+    </section>
+    <footer>Inventory & Stock Analysis System <span>•</span> Local demo application</footer>
+  </main>
+</body>
+</html>

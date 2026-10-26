@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block title %}{{ page_title }} | Inventory & Stock{% endblock %}
+{% block heading %}{{ page_title }}{% endblock %}
+{% block content %}
+<div class="form-intro"><a href="{{ url_for('products') }}">← Back to products</a><h2>{{ page_title }}</h2><p class="muted">Fields marked * are required.</p></div>
+<form class="panel form-panel" method="post">
+  <div class="form-grid">
+    <label>SKU *<input name="sku" required maxlength="50" value="{{ product.sku if product else request.form.get('sku', '') }}" placeholder="e.g. ELEC-001"></label>
+    <label>Product name *<input name="name" required maxlength="120" value="{{ product.name if product else request.form.get('name', '') }}" placeholder="e.g. Wireless Mouse"></label>
+    <label>Category *<input name="category" required maxlength="80" value="{{ product.category if product else request.form.get('category', '') }}" placeholder="e.g. Electronics"></label>
+    <label>Supplier<input name="supplier" maxlength="120" value="{{ product.supplier if product else request.form.get('supplier', '') }}" placeholder="Supplier name"></label>
+    <label>Cost price (₹) *<input type="number" name="cost_price" required min="0" step="0.01" value="{{ product.cost_price if product else request.form.get('cost_price', '0') }}"></label>
+    <label>Selling price (₹) *<input type="number" name="selling_price" required min="0" step="0.01" value="{{ product.selling_price if product else request.form.get('selling_price', '0') }}"></label>
+    <label>Current quantity *<input type="number" name="quantity" required min="0" step="1" value="{{ product.quantity if product else request.form.get('quantity', '0') }}"></label>
+    <label>Reorder level *<input type="number" name="reorder_level" required min="0" step="1" value="{{ product.reorder_level if product else request.form.get('reorder_level', '5') }}"></label>
+  </div>
+  <div class="form-actions"><a class="button button-outline" href="{{ url_for('products') }}">Cancel</a><button class="button button-primary" type="submit">Save product</button></div>
+</form>
+{% endblock %}

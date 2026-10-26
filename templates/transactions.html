@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}Stock movements | Inventory & Stock{% endblock %}
+{% block heading %}Stock movements{% endblock %}
+{% block content %}
+<div class="welcome-row"><div><h2>Movement history</h2><p class="muted">A record of stock received and stock issued. Showing the latest 200 entries.</p></div><a class="button button-primary" href="{{ url_for('new_transaction') }}">＋ Record movement</a></div>
+<section class="panel">{% if transactions %}<div class="table-wrap"><table><thead><tr><th>Date / time</th><th>Product</th><th>SKU</th><th>Movement</th><th>Quantity</th><th>Note</th></tr></thead><tbody>{% for t in transactions %}<tr><td>{{ t.created_at }}</td><td class="product-cell">{{ t.product_name }}</td><td>{{ t.sku }}</td><td>{% if t.transaction_type == 'IN' %}<span class="pill pill-success">Stock in</span>{% else %}<span class="pill pill-danger">Stock out</span>{% endif %}</td><td>{{ t.quantity }}</td><td>{{ t.note or '—' }}</td></tr>{% endfor %}</tbody></table></div>{% else %}<div class="empty-state">No movements recorded yet. Add a product first, then record stock-in or stock-out.</div>{% endif %}</section>
+{% endblock %}
