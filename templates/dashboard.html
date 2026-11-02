@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Dashboard | StockWise{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+  <div><h1 class="h3 mb-1">Inventory Dashboard</h1><p class="text-secondary mb-0">A quick view of stock health and movement.</p></div>
+  <a class="btn btn-primary mt-2" href="{{ url_for('transactions_page') }}">＋ Record transaction</a>
+</div>
+<div class="row g-3 mb-4">
+  <div class="col-md-4"><div class="stat-card"><div class="stat-label">Products</div><div class="stat-number">{{ total_products }}</div></div></div>
+  <div class="col-md-4"><div class="stat-card"><div class="stat-label">Units in stock</div><div class="stat-number">{{ total_units }}</div></div></div>
+  <div class="col-md-4"><div class="stat-card"><div class="stat-label">Estimated inventory value</div><div class="stat-number">₹{{ "%.2f"|format(inventory_value) }}</div></div></div>
+</div>
+<div class="row g-4">
+  <div class="col-lg-7"><section class="panel"><h2 class="h5">Product movement</h2><img class="img-fluid" src="{{ url_for('static', filename=chart) }}?v={{ range(1, 999999)|random }}" alt="Stock in and stock out chart"></section></div>
+  <div class="col-lg-5"><section class="panel"><h2 class="h5">Low-stock alerts <span class="badge text-bg-warning">{{ low_stock|length }}</span></h2>
+    {% if low_stock %}<div class="table-responsive"><table class="table table-sm align-middle"><thead><tr><th>Product</th><th>Stock</th><th>Reorder at</th></tr></thead><tbody>
+    {% for p in low_stock %}<tr><td>{{ p.product_name }}<div class="small text-secondary">{{ p.sku }}</div></td><td><span class="badge text-bg-danger">{{ p.current_stock }}</span></td><td>{{ p.reorder_level }}</td></tr>{% endfor %}
+    </tbody></table></div>{% else %}<p class="text-secondary">No products are currently below their reorder threshold.</p>{% endif %}
+  </section></div>
+</div>
+<section class="panel mt-4"><div class="d-flex justify-content-between"><h2 class="h5">Current stock</h2><a href="{{ url_for('products_page') }}">Manage products →</a></div>
+<div class="table-responsive"><table class="table table-hover align-middle"><thead><tr><th>SKU</th><th>Product</th><th>Category</th><th>Current stock</th><th>Reorder level</th><th>Unit cost</th></tr></thead><tbody>
+{% for p in products %}<tr><td>{{ p.sku }}</td><td>{{ p.product_name }}</td><td>{{ p.category or "—" }}</td><td>{{ p.current_stock }}</td><td>{{ p.reorder_level }}</td><td>₹{{ "%.2f"|format(p.unit_cost) }}</td></tr>{% else %}<tr><td colspan="6" class="text-secondary">No products yet. Add your first product.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}

@@ -1,0 +1,9 @@
+body { background: #f5f7fb; color: #202938; }
+.navbar-brand { letter-spacing: .2px; }
+.stat-card, .panel { background: #fff; border: 1px solid #e5e9f2; border-radius: 14px; padding: 1.25rem; box-shadow: 0 4px 16px rgba(30, 50, 80, .04); }
+.stat-label { color: #64748b; font-size: .9rem; margin-bottom: .35rem; }
+.stat-number { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 700; color: #253b80; overflow-wrap: anywhere; }
+.panel h2 { margin-bottom: 1rem; }
+.table { margin-bottom: 0; }
+.table thead th { color: #64748b; font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+footer { margin-top: 2rem; }

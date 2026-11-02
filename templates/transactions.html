@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Transactions | StockWise{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Stock transactions</h1><div class="row g-4"><div class="col-lg-4"><section class="panel"><h2 class="h5">Record movement</h2>
+<form method="post">
+<label class="form-label">Product *</label><select class="form-select mb-3" name="product_id" required><option value="">Choose product</option>{% for p in products %}<option value="{{ p.product_id }}">{{ p.sku }} — {{ p.product_name }}</option>{% endfor %}</select>
+<label class="form-label">Movement type *</label><select class="form-select mb-3" name="transaction_type" required><option value="IN">Stock in</option><option value="OUT">Stock out</option></select>
+<label class="form-label">Quantity *</label><input class="form-control mb-3" type="number" name="quantity" min="1" required>
+<label class="form-label">Date *</label><input class="form-control mb-3" type="date" name="transaction_date" value="{{ today }}" required>
+<label class="form-label">Supplier (optional)</label><select class="form-select mb-3" name="supplier_id"><option value="">Not specified</option>{% for s in suppliers %}<option value="{{ s.supplier_id }}">{{ s.supplier_name }}</option>{% endfor %}</select>
+<label class="form-label">Note</label><textarea class="form-control mb-3" name="note" rows="2"></textarea>
+<button class="btn btn-primary w-100">Save transaction</button></form>
+<p class="small text-secondary mt-3 mb-0">Stock-out transactions are rejected if there is not enough stock.</p></section></div>
+<div class="col-lg-8"><section class="panel"><h2 class="h5">Recent transaction history</h2><div class="table-responsive"><table class="table table-sm"><thead><tr><th>Date</th><th>Product</th><th>Type</th><th>Qty</th><th>Supplier</th><th>Note</th></tr></thead><tbody>
+{% for t in transactions %}<tr><td>{{ t.transaction_date }}</td><td>{{ t.product_name }}<div class="small text-secondary">{{ t.sku }}</div></td><td><span class="badge {{ 'text-bg-success' if t.transaction_type == 'IN' else 'text-bg-danger' if t.transaction_type == 'OUT' else 'text-bg-secondary' }}">{{ t.transaction_type }}</span></td><td>{{ t.quantity }}</td><td>{{ t.supplier_name or "—" }}</td><td>{{ t.note or "—" }}</td></tr>{% else %}<tr><td colspan="6">No transactions yet.</td></tr>{% endfor %}
+</tbody></table></div></section></div></div>
+{% endblock %}

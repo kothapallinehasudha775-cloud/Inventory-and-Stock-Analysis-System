@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block title %}Suppliers | StockWise{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Suppliers</h1><div class="row g-4"><div class="col-lg-4"><section class="panel"><h2 class="h5">Add supplier</h2>
+<form method="post"><label class="form-label">Supplier name *</label><input class="form-control mb-3" name="supplier_name" required>
+<label class="form-label">Contact person</label><input class="form-control mb-3" name="contact_name">
+<label class="form-label">Email</label><input class="form-control mb-3" type="email" name="email">
+<label class="form-label">Phone</label><input class="form-control mb-3" name="phone">
+<button class="btn btn-primary w-100">Add supplier</button></form></section></div>
+<div class="col-lg-8"><section class="panel"><h2 class="h5">Supplier list</h2><div class="table-responsive"><table class="table"><thead><tr><th>Name</th><th>Contact</th><th>Email</th><th>Phone</th></tr></thead><tbody>
+{% for s in suppliers %}<tr><td>{{ s.supplier_name }}</td><td>{{ s.contact_name or "—" }}</td><td>{{ s.email or "—" }}</td><td>{{ s.phone or "—" }}</td></tr>{% else %}<tr><td colspan="4">No suppliers added.</td></tr>{% endfor %}
+</tbody></table></div></section></div></div>
+{% endblock %}

@@ -1,0 +1,3 @@
+{% extends "base.html" %}
+{% block title %}Application error | StockWise{% endblock %}
+{% block content %}<div class="alert alert-danger"><h1 class="h4">Unable to load this page</h1><p class="mb-0">{{ message }}</p></div><p>Check that MySQL is running, the database was created, and your connection settings are correct.</p>{% endblock %}

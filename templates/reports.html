@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Reports | StockWise{% endblock %}
+{% block content %}
+<h1 class="h3 mb-3">Reports and analysis</h1>
+<div class="row g-3 mb-4"><div class="col-md-4"><div class="stat-card"><div class="stat-label">Estimated inventory value</div><div class="stat-number">₹{{ "%.2f"|format(inventory_value) }}</div><div class="small text-secondary">Current units × unit cost</div></div></div><div class="col-md-8"><div class="stat-card"><div class="stat-label">Low-stock products</div>{% if low_stock %}{% for p in low_stock %}<span class="badge text-bg-warning me-1 mb-1">{{ p.product_name }} ({{ p.current_stock }})</span>{% endfor %}{% else %}<p class="mb-0">No low-stock products.</p>{% endif %}</div></div></div>
+<section class="panel mb-4"><h2 class="h5">Stock valuation by product</h2><div class="table-responsive"><table class="table"><thead><tr><th>SKU</th><th>Product</th><th>Current stock</th><th>Unit cost</th><th>Estimated value</th></tr></thead><tbody>
+{% for p in products %}<tr><td>{{ p.sku }}</td><td>{{ p.product_name }}</td><td>{{ p.current_stock }}</td><td>₹{{ "%.2f"|format(p.unit_cost) }}</td><td>₹{{ "%.2f"|format((p.current_stock if p.current_stock > 0 else 0) * p.unit_cost) }}</td></tr>{% else %}<tr><td colspan="5">No products available.</td></tr>{% endfor %}
+</tbody></table></div></section>
+<section class="panel"><h2 class="h5">Monthly stock movement</h2><div class="table-responsive"><table class="table"><thead><tr><th>Month</th><th>Stock in</th><th>Stock out</th><th>Net movement</th></tr></thead><tbody>
+{% for row in history %}<tr><td>{{ row.month }}</td><td>{{ row.stock_in }}</td><td>{{ row.stock_out }}</td><td>{{ row.net_movement }}</td></tr>{% else %}<tr><td colspan="4">No stock transactions available.</td></tr>{% endfor %}
+</tbody></table></div></section>
+{% endblock %}
